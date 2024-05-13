@@ -4,7 +4,7 @@ use clap::{arg, command, value_parser, ArgAction, Command};
 
 fn main() {
     let matches = command!()
-        .arg(arg!([name] "Optional name to operate on"))
+        .arg(arg!([name] "this appears on help man"))
         .arg(
             arg!(
                 -c --config <FILE> "Sets a custom config file"
