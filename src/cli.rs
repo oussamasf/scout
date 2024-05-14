@@ -1,46 +1,87 @@
-use clap::{arg, Command};
+use clap::{Arg, Command};
 use std::fs::File;
-use std::io::{self, BufRead, BufReader, Write};
+use std::io::{BufRead, BufReader};
 
-pub fn run_cli() -> Command<'static> {
+pub fn run_cli() -> Command {
     Command::new("Scout")
         .about("Log analysis tool")
         .subcommand_required(true)
         .subcommand(
             Command::new("analyze")
                 .about("Analyze log files")
-                .arg(arg!(-f --file <FILE> "Specifies the log file to analyze").required(true))
-                .arg(arg!(-t --type <TYPE> "Specifies the type of log file"))
-                .arg(arg!(-o --output <OUTPUT> "Specifies the output file for the report")),
+                .arg(
+                    Arg::new("file")
+                        .long("file")
+                        .short('f')
+                        .value_name("FILE")
+                        .help("Specifies the log file to analyze")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("type")
+                        .long("type")
+                        .short('t')
+                        .value_name("TYPE")
+                        .help("Specifies the type of log file"),
+                )
+                .arg(
+                    Arg::new("output")
+                        .long("output")
+                        .short('o')
+                        .value_name("OUTPUT")
+                        .help("Specifies the output file for the report"),
+                ),
         )
         .subcommand(
             Command::new("view")
                 .about("View the contents of a log file")
-                .arg(arg!(-f --file <FILE> "Specifies the log file to view").required(true)),
+                .arg(
+                    Arg::new("file")
+                        .long("file")
+                        .short('f')
+                        .value_name("FILE")
+                        .help("Specifies the log file to view")
+                        .required(true),
+                ),
         )
         .subcommand(
             Command::new("filter")
                 .about("Filter log entries based on a query")
-                .arg(arg!(-f --file <FILE> "Specifies the log file to filter").required(true))
                 .arg(
-                    arg!(-q --query <QUERY> "Defines the query for filtering entries")
+                    Arg::new("file")
+                        .long("file")
+                        .short('f')
+                        .value_name("FILE")
+                        .help("Specifies the log file to filter")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("query")
+                        .long("query")
+                        .short('q')
+                        .value_name("QUERY")
+                        .help("Defines the query for filtering entries")
                         .required(true),
                 ),
         )
-        .subcommand(Command::new("help").about("Shows help information"))
-        .subcommand(Command::new("version").about("Shows version information"));
+        // .subcommand(Command::new("help").about("Shows help information"))
+        .subcommand(Command::new("version").about("Shows version information"))
 }
 
 pub fn handle_matches(matches: &clap::ArgMatches) {
     match matches.subcommand() {
         Some(("analyze", sub_matches)) => {
             let file_path = sub_matches.get_one::<String>("file").unwrap();
+
+            let default_log_type = "default".to_string();
             let log_type = sub_matches
                 .get_one::<String>("type")
-                .unwrap_or(&"default".to_string());
+                .unwrap_or(&default_log_type);
+
+            let default_output = "report.txt".to_string();
             let output = sub_matches
                 .get_one::<String>("output")
-                .unwrap_or(&"report.txt".to_string());
+                .unwrap_or(&default_output);
 
             println!(
                 "Analyzing {} as {} type. Results will be saved to {}",
@@ -73,7 +114,7 @@ pub fn handle_matches(matches: &clap::ArgMatches) {
             // TODO
         }
         Some(("help", _)) => {
-            app.print_help().unwrap();
+            run_cli().print_help().unwrap();
             println!();
         }
         Some(("version", _)) => {
