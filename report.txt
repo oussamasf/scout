@@ -1,0 +1,6 @@
+Total entries: 5
+Info Count: 2
+Debug Count: 1
+Error Count: 1
+Warnings Count: 1
+User:12345 made 2 actions

@@ -1,0 +1,47 @@
+[
+  {
+      "timestamp": "2024-05-15T10:15:30Z",
+      "level": "INFO",
+      "message": "Application started",
+      "context": {
+          "version": "1.0.0",
+          "environment": "production"
+      }
+  },
+  {
+      "timestamp": "2024-05-15T10:16:00Z",
+      "level": "WARN",
+      "message": "Low disk space",
+      "context": {
+          "available_space": "500MB",
+          "threshold": "1GB"
+      }
+  },
+  {
+      "timestamp": "2024-05-15T10:17:45Z",
+      "level": "ERROR",
+      "message": "Failed to connect to database",
+      "context": {
+          "database": "customer_db",
+          "retry_attempts": 3
+      }
+  },
+  {
+      "timestamp": "2024-05-15T10:18:30Z",
+      "level": "INFO",
+      "message": "User login successful",
+      "context": {
+          "user_id": "12345",
+          "username": "johndoe"
+      }
+  },
+  {
+      "timestamp": "2024-05-15T10:20:15Z",
+      "level": "DEBUG",
+      "message": "User requested account details",
+      "context": {
+          "user_id": "12345",
+          "section": "account_info"
+      }
+  }
+]
