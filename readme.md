@@ -17,8 +17,7 @@ Scout is a command-line application written in Rust for analyzing, viewing, and 
    ```
 2. **Build the project:**:
    ```sh
-   git clone https://github.com/oussamasf/scout
-   cd scout
+   cargo build --release
    ```
 3. **Run the application::**:
 
