@@ -143,7 +143,24 @@ pub fn handle_matches(matches: &clap::ArgMatches) {
                 "Filtering entries from {} with query '{}'",
                 file_path, query
             );
-            // TODO
+
+            match parse_json_log(file_path) {
+                Ok(logs_vec) => {
+                    let filtered_vec: Vec<_> = logs_vec
+                        .into_iter()
+                        .filter(|el| el.message.contains(query))
+                        .collect();
+                    if filtered_vec.is_empty() {
+                        println!("No entries found matching the query '{}'", query);
+                    } else {
+                        println!("Filtered Entries:");
+                        for entry in filtered_vec {
+                            println!("{:?}", entry);
+                        }
+                    }
+                }
+                Err(_) => println!("something went wrong"),
+            }
         }
         Some(("help", _)) => {
             run_cli().print_help().unwrap();
