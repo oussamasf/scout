@@ -1,3 +1,4 @@
+pub mod json;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]

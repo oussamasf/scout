@@ -1,3 +1,3 @@
-fn main() {
+pub fn reporter() {
     println!("Hello, world!");
 }

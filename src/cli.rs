@@ -1,9 +1,9 @@
+use crate::analyzer::analyze_logs;
+use crate::parser::json::parse_json_log;
 use clap::{Arg, Command};
 use serde_json::{Result, Value};
-use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-
 pub fn deserialize(data: &str) -> Result<Value> {
     let v: Value = serde_json::from_str(data)?;
 
@@ -99,16 +99,18 @@ pub fn handle_matches(matches: &clap::ArgMatches) {
                 "Analyzing {} as {} type. Results will be saved to {}",
                 file_path, log_type, output
             );
-            //? 1. read file
-            let contents =
-                fs::read_to_string(file_path).expect("Should have been able to read the file");
-
-            println!("With text:\n{contents}");
 
             if log_type == "json" {
-                let json_logs = deserialize(contents.as_str());
-                match json_logs {
-                    Ok(el) => println!("{el}"),
+                match parse_json_log(file_path) {
+                    Ok(el) => {
+                        let analysis = analyze_logs(&el);
+                        println!("debug_count: {}", analysis.debug_count);
+                        println!("error_count: {}", analysis.error_count);
+                        println!("info_count: {}", analysis.info_count);
+                        println!("total_entries: {}", analysis.total_entries);
+                        println!("user_actions: {:?}", analysis.user_actions);
+                        println!("warnings_count: {}", analysis.warnings_count);
+                    }
                     Err(_) => println!("something went wrong"),
                 }
             }
