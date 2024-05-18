@@ -1,9 +1,11 @@
 use crate::analyzer::analyze_logs;
 use crate::parser::json::parse_json_log;
+use crate::reporter::{generate_report, print_report, save_report};
 use clap::{Arg, Command};
 use serde_json::{Result, Value};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+
 pub fn deserialize(data: &str) -> Result<Value> {
     let v: Value = serde_json::from_str(data)?;
 
@@ -110,6 +112,10 @@ pub fn handle_matches(matches: &clap::ArgMatches) {
                         println!("total_entries: {}", analysis.total_entries);
                         println!("user_actions: {:?}", analysis.user_actions);
                         println!("warnings_count: {}", analysis.warnings_count);
+
+                        let report = generate_report(&analysis);
+                        print_report(&report);
+                        let _ = save_report(&report, &default_output);
                     }
                     Err(_) => println!("something went wrong"),
                 }
